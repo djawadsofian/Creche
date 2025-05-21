@@ -1,7 +1,11 @@
+import Header from "@/Notification/Header";
+
 const Home = () => {
   return (
-    <div >riiiiiiiigel</div>
-  )
-}
+    <div>
+      <Header />
+    </div>
+  );
+};
 
-export default Home ;
+export default Home;
