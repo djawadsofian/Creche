@@ -1,10 +1,10 @@
-import axios, {
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-    AxiosError,
-  } from "axios";
-  
+import axios from "axios";
+import type {
+  AxiosInstance,
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from "axios";
 //   import Cookies from "js-cookie";
   
   // Set default Axios configuration
