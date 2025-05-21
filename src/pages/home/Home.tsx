@@ -1,7 +1,14 @@
+import Header from "@/Notification/Header";
+import Landing from "./LandingPage";
+
 const Home = () => {
   return (
-    <div >riiiiiiiigel</div>
-  )
-}
+    <div className="">
+      <Header />
+      <Landing />
 
-export default Home ;
+    </div>
+  );
+};
+
+export default Home;
