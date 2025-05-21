@@ -1,4 +1,4 @@
-import { ApiClient } from "@/utils/httpClient";
+import { ApiClient } from "../utils/httpClient";
 
 const client = ApiClient({
   baseURL: "/api/",
