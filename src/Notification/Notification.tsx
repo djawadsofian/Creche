@@ -19,8 +19,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useGetMembers } from "@/hooks/useGetMembers";
-import { useTeam } from "@/hooks/teams";
 import { NavLink } from "react-router-dom";
 const Notification = () => {
   const { messages, sendMessage, markAsRead } = useWebSocket();
@@ -30,13 +28,13 @@ const Notification = () => {
   );
   const [message, setMessage] = useState("");
 
-  const { data: membersData } = useGetMembers(
-    { id: teamIdForgetMembers! },
-    { enabled: !!teamIdForgetMembers }
-  );
-  const { data: Team, error: TeamError } = useTeam(teamIdForgetMembers, {
-    enabled: !!teamIdForgetMembers,
-  });
+  // const { data: membersData } = useGetMembers(
+  //   { id: teamIdForgetMembers! },
+  //   { enabled: !!teamIdForgetMembers }
+  // );
+  // const { data: Team, error: TeamError } = useTeam(teamIdForgetMembers, {
+  //   enabled: !!teamIdForgetMembers,
+  // });
 
   // const { data: profile, isLoading, error } = useProfileById(userId || 0);
   const [error, setError] = useState("");

@@ -1,9 +1,12 @@
 import Header from "@/Notification/Header";
+import Landing from "./LandingPage";
 
 const Home = () => {
   return (
-    <div>
+    <div className="">
       <Header />
+      <Landing />
+
     </div>
   );
 };
