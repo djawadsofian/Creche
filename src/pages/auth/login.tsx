@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { login } from "../../api/login";
 // import { loginSuccess } from "@/redux/reducers/AuthReducer";
 import { FaEnvelope, FaLock, FaUsers, FaUtensils, FaChalkboardTeacher, FaUserShield, FaChevronRight } from "react-icons/fa";
+import logo from "@/assets/istockphoto-1165158707-612x612-removebg-preview.png"
 
 // Define user roles
 const userRoles = [
@@ -31,7 +32,7 @@ const Login: React.FC = () => {
 
   const loginMutation = useMutation({
     mutationFn: (values: LoginFormValues) => {
-      return login({ ...values, role: selectedRole });
+      return login({ ...values });
     },
     onError: (error: any) => {
       if (error === "No active account found with the given credentials") {
@@ -43,9 +44,9 @@ const Login: React.FC = () => {
     onSuccess: (data: any) => {
     //   dispatch(loginSuccess({ token: data.access, role: selectedRole }));
       localStorage.setItem("access_token", data.access);
-      localStorage.setItem("refresh_token", data.refresh);
-      localStorage.setItem("user_role", selectedRole);
-      navigate("/dashboard");
+      // localStorage.setItem("refresh_token", data.refresh);
+      // localStorage.setItem("user_role", selectedRole);
+      navigate("/");
     },
   });
 
@@ -77,23 +78,23 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="h-[91vh] flex flex-row w-full overflow-hidden ">
+    <div className="h-screen flex flex-row w-full overflow-hidden ">
       {/* Left Panel with enhanced design */}
-      <div className="relative w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 flex flex-col items-start justify-center pl-16 text-white font-poppins overflow-hidden">
+      <div className="relative w-1/2 bg-gradient-to-br from-[#FCF259] to-[#c9c046]  flex flex-col items-start justify-center pl-16 text-white font-poppins overflow-hidden">
         {/* Background pattern overlay */}
         <div className="absolute inset-0 bg-blue-600 opacity-10">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMzYgMzRjMC0yLjItMS44LTQtNC00cy00IDEuOC00IDQgMS44IDQgNCA0IDQtMS44IDQtNHoiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLW9wYWNpdHk9Ii4xIi8+PGNpcmNsZSBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMDUiIGN4PSIzMiIgY3k9IjM0IiByPSIxIi8+PC9nPjwvc3ZnPg==')] bg-repeat" />
         </div>
 
         <div className="absolute top-6 left-6 flex items-center z-10">
-          <div className="w-12 h-12 mr-2 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+          
             <img
-              src="/api/placeholder/50/50"
+              src={logo}
               alt="Crèche Logo"
-              className="w-8 h-8"
+              className="w-20 h-20"
             />
-          </div>
-          <h2 className="text-2xl font-bold">CrècheConnect</h2>
+          
+          <h2 className="text-2xl font-bold">BDS Creche</h2>
         </div>
 
         <div className="relative z-10 pr-8">
@@ -123,13 +124,12 @@ const Login: React.FC = () => {
           </div> */}
         </div>
 
-        {/* Bottom decorative element */}
-        <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-blue-900 to-transparent opacity-40"></div>
+        
       </div>
 
       {/* Right Panel - Enhanced Form */}
       <div className="w-1/2 flex items-center justify-center bg-gray-50">
-        <div className="w-full h-full px-10 pt-6 bg-white shadow-xl">
+        <div className="w-full h-full px-10 pt-12 bg-white shadow-xl">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800 mb-2">
               Connexion
@@ -150,7 +150,7 @@ const Login: React.FC = () => {
                   onClick={() => setSelectedRole(role.id)}
                   className={`flex items-center justify-center py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 ${
                     selectedRole === role.id
-                      ? "bg-blue-600 text-white shadow-md transform scale-105"
+                      ? "bg-[#e8db29] text-white shadow-md transform scale-105"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-102"
                   }`}
                 >
@@ -173,7 +173,7 @@ const Login: React.FC = () => {
                     <Field
                       type="email"
                       name="email"
-                      className="w-full pl-11 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+                      className="w-full pl-11 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#e8db29] focus:border-[#e8db29] text-gray-700"
                       placeholder="Adresse email"
                     />
                   </div>
@@ -190,7 +190,7 @@ const Login: React.FC = () => {
                     <Field
                       type="password"
                       name="password"
-                      className="w-full pl-11 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+                      className="w-full pl-11 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#e8db29] focus:border-[#e8db29] text-gray-700"
                       placeholder="Mot de passe"
                     />
                   </div>
@@ -207,14 +207,14 @@ const Login: React.FC = () => {
                       id="remember-me"
                       name="remember-me"
                       type="checkbox"
-                      className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-5 w-5 text-[#e8db29] focus:ring-[#e8db29] border-gray-300 rounded"
                     />
                     <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
                       Se souvenir de moi
                     </label>
                   </div>
                   <div>
-                    <a href="#" className="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                    <a href="#" className="text-sm font-medium text-[#e8db29] hover:text-[#e8db29] transition-colors">
                       Mot de passe oublié?
                     </a>
                   </div>
@@ -229,7 +229,7 @@ const Login: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 px-6 mt-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-xl transition-colors shadow-md hover:shadow-lg disabled:opacity-70 flex items-center justify-center"
+                  className="w-full py-4 px-6 mt-4 bg-gradient-to-r from-[#e8db29] to-[#e8db29] hover:from-[#e8db29] hover:to-[#e8db29] text-white font-medium rounded-xl transition-colors shadow-md hover:shadow-lg disabled:opacity-70 flex items-center justify-center"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center">
@@ -254,8 +254,8 @@ const Login: React.FC = () => {
             <p className="text-gray-600">
               Vous n'avez pas encore de compte?{" "}
               <button 
-                onClick={() => navigate("/register")}
-                className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+                onClick={() => navigate("/signUp")}
+                className="font-medium text-[#e8db29] hover:text-[#e8db29] transition-colors"
               >
                 S'inscrire
               </button>

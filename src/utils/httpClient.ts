@@ -104,11 +104,10 @@ import type {
   
           if (statusCode === 401) {
             if (
-              !localStorage.getItem("refresh_token") &&
               !localStorage.getItem("access_token") &&
               message === "Authentication credentials were not provided."
             ) {
-              return Promise.reject("translations.loginRequired");
+              return Promise.reject("loginRequired");
             } else if (
               originalRequest &&
               !originalRequest._retry &&
