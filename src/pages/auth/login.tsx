@@ -43,7 +43,7 @@ const Login: React.FC = () => {
     },
     onSuccess: (data: any) => {
     //   dispatch(loginSuccess({ token: data.access, role: selectedRole }));
-      localStorage.setItem("access_token", data.access);
+      localStorage.setItem("access_token", data.token);
       // localStorage.setItem("refresh_token", data.refresh);
       // localStorage.setItem("user_role", selectedRole);
       navigate("/");

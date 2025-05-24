@@ -24,7 +24,7 @@ export const login = async ({ email, password }: LoginCredentials) => {
         email: email,
         password: password,
     };
-  const response = await client.post("login/", data);
+  const response = await client.post("/login", data);
     return response;
     
 };
@@ -37,6 +37,6 @@ export const signup = async ({ name , userName , email, password, role }: Signup
       password: password,
       role : role,
   }
-  const response = await client.post("users/", data);
+  const response = await client.post("/users", data);
   return response;
 }

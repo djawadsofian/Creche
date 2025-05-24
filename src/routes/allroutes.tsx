@@ -10,6 +10,6 @@ interface RouteConfig {
 
 export const crecheroutes: RouteConfig[] = [
   { path: "/", element: <Home /> },
-  { path: "/login", element: <Login/>},
+  { path: "/signin", element: <Login/>},
   { path: "/signup", element: <SignUp/>},
 ];
