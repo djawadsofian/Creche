@@ -10,9 +10,35 @@ interface Child {
 
 interface ChildrenListProps {
   childrenList: Child[];
+  isLoading?: boolean;
+  isError?: boolean;
 }
 
-const ChildrenList: React.FC<ChildrenListProps> = ({ childrenList }) => {
+const ChildrenList: React.FC<ChildrenListProps> = ({ 
+  childrenList, 
+  isLoading = false,
+  isError = false 
+}) => {
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <div className="flex justify-center">
+          <div className="w-8 h-8 border-4 border-[#F16767] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <p className="text-center text-red-500">
+          Error loading children. Please try again later.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <h2 className="text-3xl font-bold text-[#F16767] mb-8 text-center">
@@ -34,7 +60,7 @@ const ChildrenList: React.FC<ChildrenListProps> = ({ childrenList }) => {
                 {child.name}
               </h3>
               <p className="text-gray-700 mb-1">
-                <strong>Birth Date:</strong> {child.birthDate}
+                <strong>Birth Date:</strong> {new Date(child.birthDate).toLocaleDateString()}
               </p>
               {child.allergies && (
                 <p className="text-gray-700 mb-1">

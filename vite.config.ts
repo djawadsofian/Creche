@@ -9,12 +9,17 @@ export default defineConfig({
   server: {
     proxy: {
       '/users': {
-        target: 'http://192.168.15.50:8080',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false
       },
       '/login': {
-        target: 'http://192.168.15.50:8080',
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false
+      },
+      '/children': {
+        target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false
       },

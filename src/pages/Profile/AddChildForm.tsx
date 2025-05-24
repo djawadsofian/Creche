@@ -3,6 +3,7 @@ import React, { useState } from "react";
 interface AddChildFormProps {
   parentId: number;
   onSubmit: (child: ChildData) => void;
+  isLoading?: boolean;
 }
 
 interface ChildData {
@@ -15,7 +16,11 @@ interface ChildData {
   };
 }
 
-const AddChildForm: React.FC<AddChildFormProps> = ({ parentId, onSubmit }) => {
+const AddChildForm: React.FC<AddChildFormProps> = ({ 
+  parentId, 
+  onSubmit,
+  isLoading = false 
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     birthDate: "",
@@ -37,12 +42,19 @@ const AddChildForm: React.FC<AddChildFormProps> = ({ parentId, onSubmit }) => {
       parent: { id: parentId },
     };
     onSubmit(child);
+    // Reset form after submission
+    setFormData({
+      name: "",
+      birthDate: "",
+      allergies: "",
+      specialNeeds: "",
+    });
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className=" mx-32 p-6 bg-white rounded-xl shadow space-y-4"
+      className="mx-32 p-6 bg-white rounded-xl shadow space-y-4"
     >
       <h2 className="text-2xl font-bold text-[#F16767] mb-4">Add Your Child</h2>
 
@@ -55,6 +67,7 @@ const AddChildForm: React.FC<AddChildFormProps> = ({ parentId, onSubmit }) => {
           value={formData.name}
           onChange={handleChange}
           className="w-full border border-gray-300 rounded px-3 py-2"
+          disabled={isLoading}
         />
       </div>
 
@@ -67,6 +80,7 @@ const AddChildForm: React.FC<AddChildFormProps> = ({ parentId, onSubmit }) => {
           value={formData.birthDate}
           onChange={handleChange}
           className="w-full border border-gray-300 rounded px-3 py-2"
+          disabled={isLoading}
         />
       </div>
 
@@ -77,6 +91,7 @@ const AddChildForm: React.FC<AddChildFormProps> = ({ parentId, onSubmit }) => {
           value={formData.allergies}
           onChange={handleChange}
           className="w-full border border-gray-300 rounded px-3 py-2"
+          disabled={isLoading}
         />
       </div>
 
@@ -87,14 +102,16 @@ const AddChildForm: React.FC<AddChildFormProps> = ({ parentId, onSubmit }) => {
           value={formData.specialNeeds}
           onChange={handleChange}
           className="w-full border border-gray-300 rounded px-3 py-2"
+          disabled={isLoading}
         />
       </div>
 
       <button
         type="submit"
-        className="bg-[#F16767] hover:bg-red-400 text-white font-semibold px-6 py-2 rounded shadow"
+        className="bg-[#F16767] hover:bg-red-400 text-white font-semibold px-6 py-2 rounded shadow disabled:opacity-75"
+        disabled={isLoading}
       >
-        Add Child
+        {isLoading ? "Adding..." : "Add Child"}
       </button>
     </form>
   );
