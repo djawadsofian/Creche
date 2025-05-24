@@ -10,7 +10,7 @@ interface Message {
 const WebSocketChat = () => {
   const [wsUrl, setWsUrl] = useState("");
   const [message, setMessage] = useState("");
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
   const { messages, sendMessage, connectWebSocket, connectionStatus } =
     useWebSocket();
   const messagesEndRef = useRef(null);
@@ -54,7 +54,7 @@ const WebSocketChat = () => {
     <div className="flex flex-col h-screen max-w-4xl mx-auto p-4 bg-gray-50 rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
         {" "}
-        MiniLab WebSocket{" "}
+        Messagerie
       </h1>
 
       {/* WebSocket URL Connection */}

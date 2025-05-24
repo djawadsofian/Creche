@@ -1,11 +1,10 @@
-import { fetchProfile , fetchProfileById, updateProfile} from "@/api/profile";
-import { RootState } from "@/redux/store";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { useSelector } from "react-redux";
+import { fetchProfile, fetchProfileById, updateProfile } from "@/api/profile";
+import { useQuery } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useMyProfile = (): UseQueryResult<[]> => {
-  const token = useSelector((state: RootState) => state.auth.token);
+  const token = localStorage.getItem("token");
+
   return useQuery<any>({
     queryKey: ["myProfile", token],
     queryFn: fetchProfile,
@@ -15,7 +14,7 @@ export const useMyProfile = (): UseQueryResult<[]> => {
   });
 };
 
-export const useUpdateProfile = (profile : any) => {
+export const useUpdateProfile = (profile: any) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => updateProfile(profile),
@@ -25,9 +24,9 @@ export const useUpdateProfile = (profile : any) => {
   });
 };
 
-
 export const useProfileById = (id: number): UseQueryResult<any> => {
-  const token = useSelector((state: RootState) => state.auth.token);
+  const token = localStorage.getItem("token");
+
   return useQuery({
     queryKey: ["profile", id, token],
     queryFn: () => fetchProfileById(id),
