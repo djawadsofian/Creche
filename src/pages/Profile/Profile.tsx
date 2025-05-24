@@ -126,6 +126,8 @@ const UserProfilePage: React.FC = () => {
       
       {/* Children List */}
       <ChildrenList childrenList={children} />
+      <AddAnnouncementForm onSubmit={handleAnnouncementSubmit} />
+      <AnnouncementsList announcements={announcements} />
     </div>
   );
 };
