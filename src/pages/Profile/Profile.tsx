@@ -5,7 +5,23 @@ import profilepic from "@/assets/Colorful Finger Paint Fun_ Engaging Kids….jpe
 import Header from "@/Notification/Header";
 import AddChildForm from "./AddChildForm";
 import ChildrenList from "./ChildrenList";
+import AddAnnouncementForm from "./AddAnnouncementForm";
+import AnnouncementsList from "./AnnouncementList";
 
+const mockAnnouncements = [
+  {
+    id: 1,
+    title: "Holiday Notice",
+    content: "Creche will be closed on Friday.",
+    date: "2025-05-23",
+  },
+  {
+    id: 2,
+    title: "New Activity",
+    content: "We are starting a new music class every Wednesday.",
+    date: "2025-05-20",
+  },
+];
 const SampleChildrenData = [
   {
     id: 1,
@@ -98,10 +114,22 @@ const UserProfilePage: React.FC = () => {
   };
   const [children, setChildren] = useState<Child[]>([]);
 
-  useEffect(() => {
+ useEffect(() => {
     // Simulate fetching data
-    setChildren(SampleChildrenData);
+setChildren(SampleChildrenData);
   }, []);
+  const handleAnnouncementSubmit = (announcement: any) => {
+    console.log("Submitted Announcement:", announcement);
+    // Example: POST to backend API
+    // fetch('/api/announcements', { method: 'POST', body: JSON.stringify(announcement) })
+  };
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+
+  useEffect(() => {
+    // Simulate fetching from API
+    setAnnouncements(mockAnnouncements);
+  }, []);
+
   return (
     <div className="bg-gray-50 z-0  flex flex-col gap-3 h- ">
       {/* Header/Banner Section */}
@@ -432,6 +460,8 @@ const UserProfilePage: React.FC = () => {
       </div>
       <AddChildForm parentId={parentId} onSubmit={handleAddChild} />
       <ChildrenList childrenList={children} />
+      <AddAnnouncementForm onSubmit={handleAnnouncementSubmit} />
+      <AnnouncementsList announcements={announcements} />
     </div>
   );
 };
