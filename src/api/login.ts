@@ -21,7 +21,7 @@ interface SignupFormValues {
 
 export const login = async ({ email, password }: LoginCredentials) => {
     const data = {
-        email: email,
+        username: email,
         password: password,
     };
   const response = await client.post("/login", data);
@@ -32,7 +32,7 @@ export const login = async ({ email, password }: LoginCredentials) => {
 export const signup = async ({ name , userName , email, password, role }: SignupFormValues) => {
   const data = {
       name : name, 
-      userName : userName, 
+      username : userName, 
       email: email,
       password: password,
       role : role,

@@ -1,3 +1,4 @@
+// src/components/AnnouncementsList.tsx
 import React from "react";
 
 interface Announcement {
@@ -9,11 +10,35 @@ interface Announcement {
 
 interface AnnouncementsListProps {
   announcements: Announcement[];
+  isLoading?: boolean;
+  isError?: boolean;
 }
 
 const AnnouncementsList: React.FC<AnnouncementsListProps> = ({
   announcements,
+  isLoading = false,
+  isError = false,
 }) => {
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <div className="flex justify-center">
+          <div className="w-8 h-8 border-4 border-[#F16767] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <p className="text-center text-red-500">
+          Error loading announcements. Please try again later.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <h2 className="text-3xl font-bold text-[#F16767] mb-8 text-center">
@@ -34,7 +59,7 @@ const AnnouncementsList: React.FC<AnnouncementsListProps> = ({
               </h3>
               <p className="text-gray-700 mb-2">{announcement.content}</p>
               <p className="text-sm text-gray-500 italic">
-                {announcement.date}
+                {new Date(announcement.date).toLocaleDateString()}
               </p>
             </div>
           ))}

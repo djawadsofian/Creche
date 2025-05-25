@@ -82,8 +82,20 @@ const SignUp = () => {
         setNonFieldError(error?.toString() || "Une erreur est survenue");
       }
     },
-    onSuccess: () => {
-      navigate("/login");
+    onSuccess: (data) => {
+      // Store user data in localStorage with role-specific key
+      const storageKey = data?.role.toLowerCase(); // 'parent', 'admin', etc.
+      localStorage.setItem(storageKey, JSON.stringify(data));
+      
+      // If you also want to store the token separately (if it exists)
+      if (data?.token) {
+        localStorage.setItem('access_token', data.token);
+      }
+      
+      // Redirect based on role (example)
+      
+        navigate('/signin');
+      
     },
   });
 

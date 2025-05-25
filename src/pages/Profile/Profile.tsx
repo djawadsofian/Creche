@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useProfileById } from "@/hooks/profile";
 import profilepic from "@/assets/Colorful Finger Paint Fun_ Engaging Kids….jpeg";
 import Header from "@/Notification/Header";
@@ -7,39 +7,100 @@ import AddChildForm from "./AddChildForm";
 import ChildrenList from "./ChildrenList";
 import { useChildren } from "@/hooks/children";
 import { useAddChild } from "@/hooks/children";
+import { useUsers } from "@/hooks/useUsers";
+import AddMealForm from "./AddMealForm";
+import MealsList from "./MealsList";
+import { useMeals } from "@/hooks/meals";
+import { useAddMeal } from "@/hooks/meals";
+import { useAnnouncements, useCreateAnnouncement } from "@/hooks/announcements";
+import AddAnnouncementForm from "./AddAnnouncementForm";
+import AnnouncementsList from "./AnnouncementList";
 
 const UserProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const userId = id && !isNaN(Number(id)) ? parseInt(id) : null;
-  const { data: profile, isLoading, error } = useProfileById(userId || 0);
-  const navigate = useNavigate();
   
-  // Use the children hook
-  const { data: children = [], refetch } = useChildren();
+  // Get user data from localStorage based on current route
+  const isParentDashboard = location.pathname.includes('parent');
+  const isAdminDashboard = location.pathname.includes('admin');
+  const userRole = isParentDashboard ? 'parent' : isAdminDashboard ? 'admin' : null;
+  const storedUser = userRole ? JSON.parse(localStorage.getItem(userRole) || 'null') : null;
+
+  const {
+    data: profile,
+    isLoading: isProfileLoading,
+    error: profileError,
+  } = useProfileById(userId || 0);
+
+  // Users data
+  const { data: users = [], isLoading: isUsersLoading } = useUsers();
+  
+  // Use stored user data if available, otherwise fall back to API data
+  const currentUser = storedUser || users[0] || {};
+
+  // Children data
+  const { data: children = [], refetch: refetchChildren } = useChildren();
   const addChildMutation = useAddChild();
-  
-  // Replace this with actual logged-in parent ID
-  const parentId = 1; 
+
+  // Meals data
+  const { data: meals = [], refetch: refetchMeals } = useMeals();
+  const addMealMutation = useAddMeal();
+
+  // Announcements data
+  const { data: announcements = [], refetch: refetchAnnouncements } = useAnnouncements();
+  const createAnnouncementMutation = useCreateAnnouncement();
+
+  // Get parent ID from stored user or use default
+  const parentId = storedUser?.id || 1;
 
   const handleAddChild = async (childData: any) => {
     try {
       await addChildMutation.mutateAsync({
         ...childData,
-        parent: { id: parentId }
+        parent: { id: parentId },
       });
-      refetch(); // Refresh the children list after adding
+      refetchChildren();
     } catch (error) {
       console.error("Error adding child:", error);
     }
   };
 
-  if (isLoading) {
+  const handleAnnouncementSubmit = async (announcementData: any) => {
+    try {
+      await createAnnouncementMutation.mutateAsync(announcementData);
+      refetchAnnouncements();
+    } catch (error) {
+      console.error("Error creating announcement:", error);
+    }
+  };
+
+  const handleAddMeal = async (mealData: any) => {
+    try {
+      await addMealMutation.mutateAsync(mealData);
+      refetchMeals();
+    } catch (error) {
+      console.error("Error adding meal:", error);
+    }
+  };
+
+  if (isProfileLoading || isUsersLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
+
+  // Combine profile data with current user data
+  const userData = {
+    ...currentUser,
+    ...profile,
+  };
+
+  // Determine which components to show based on user role
+  const showParentFeatures = userRole === 'parent';
+  const showAdminFeatures = userRole === 'admin';
 
   return (
     <div className="bg-gray-50 z-0 flex flex-col gap-3 h-">
@@ -54,8 +115,8 @@ const UserProfilePage: React.FC = () => {
               <div className="flex justify-center md:justify-start px-6 -mt-16 md:mt-0 md:-mb-6 relative">
                 <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white overflow-hidden shadow-lg">
                   <img
-                    src={profile?.profile_picture_url || profilepic}
-                    alt={`${profile?.first_name || "User"}'s profile`}
+                    src={userData?.profile_picture_url || profilepic}
+                    alt={`${userData?.name || "User"}'s profile`}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -66,11 +127,10 @@ const UserProfilePage: React.FC = () => {
                 <div className="flex flex-col md:flex-row md:items-center justify-between">
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900">
-                      {profile?.first_name || "yacine"}{" "}
-                      {profile?.last_name || "djaaraoui"}
+                      {userData?.name || "User"}
                     </h1>
                     <p className="text-gray-600 text-extrabold">
-                      {profile?.role || "administrateur"}
+                      {userData?.role || "user"}
                     </p>
                   </div>
                 </div>
@@ -90,7 +150,7 @@ const UserProfilePage: React.FC = () => {
                 Informations
               </h2>
               <div className="space-y-4">
-                {profile?.email && (
+                {userData?.email && (
                   <div className="flex items-start">
                     <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-primary">
                       <svg
@@ -107,7 +167,9 @@ const UserProfilePage: React.FC = () => {
                       <h3 className="text-sm font-medium text-gray-900">
                         Email
                       </h3>
-                      <p className="text-sm text-gray-600">{profile?.email}</p>
+                      <p className="text-sm text-gray-600">
+                        {userData?.email}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -116,18 +178,37 @@ const UserProfilePage: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      {/* Add Child Form */}
-      <AddChildForm 
-        parentId={parentId} 
-        onSubmit={handleAddChild} 
-        isLoading={addChildMutation.isPending}
-      />
-      
-      {/* Children List */}
-      <ChildrenList childrenList={children} />
-      <AddAnnouncementForm onSubmit={handleAnnouncementSubmit} />
-      <AnnouncementsList announcements={announcements} />
+
+      {/* Parent-specific features */}
+      {showParentFeatures && (
+        <>
+          <AddChildForm
+            parentId={parentId}
+            onSubmit={handleAddChild}
+            isLoading={addChildMutation.isPending}
+          />
+
+          <ChildrenList childrenList={children} />
+
+          <AddMealForm
+            onSubmit={handleAddMeal}
+            isLoading={addMealMutation.isPending}
+          />
+
+          <MealsList mealsList={meals} />
+        </>
+      )}
+
+      {/* Admin-specific features */}
+      {showAdminFeatures && (
+        <>
+          <AddAnnouncementForm
+            onSubmit={handleAnnouncementSubmit}
+            isLoading={createAnnouncementMutation.isPending}
+          />
+          <AnnouncementsList announcements={announcements} />
+        </>
+      )}
     </div>
   );
 };

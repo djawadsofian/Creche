@@ -23,6 +23,16 @@ export default defineConfig({
         changeOrigin: true,
         secure: false
       },
+      '/meals': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false
+      },
+      '/announcements': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false
+      },
     }
   },
   resolve: {

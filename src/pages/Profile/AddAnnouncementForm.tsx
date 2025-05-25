@@ -1,3 +1,4 @@
+// src/components/AddAnnouncementForm.tsx
 import React, { useState } from "react";
 
 interface Announcement {
@@ -8,15 +9,17 @@ interface Announcement {
 
 interface AddAnnouncementFormProps {
   onSubmit: (announcement: Announcement) => void;
+  isLoading?: boolean;
 }
 
 const AddAnnouncementForm: React.FC<AddAnnouncementFormProps> = ({
   onSubmit,
+  isLoading = false,
 }) => {
   const [formData, setFormData] = useState<Announcement>({
     title: "",
     content: "",
-    date: "",
+    date: new Date().toISOString().split('T')[0], // Default to today's date
   });
 
   const handleChange = (
@@ -29,6 +32,12 @@ const AddAnnouncementForm: React.FC<AddAnnouncementFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
+    // Reset form after submission
+    setFormData({
+      title: "",
+      content: "",
+      date: new Date().toISOString().split('T')[0],
+    });
   };
 
   return (
@@ -49,6 +58,7 @@ const AddAnnouncementForm: React.FC<AddAnnouncementFormProps> = ({
           value={formData.title}
           onChange={handleChange}
           className="w-full border border-gray-300 rounded px-3 py-2"
+          disabled={isLoading}
         />
       </div>
 
@@ -60,6 +70,8 @@ const AddAnnouncementForm: React.FC<AddAnnouncementFormProps> = ({
           value={formData.content}
           onChange={handleChange}
           className="w-full border border-gray-300 rounded px-3 py-2"
+          disabled={isLoading}
+          rows={4}
         />
       </div>
 
@@ -72,14 +84,16 @@ const AddAnnouncementForm: React.FC<AddAnnouncementFormProps> = ({
           value={formData.date}
           onChange={handleChange}
           className="w-full border border-gray-300 rounded px-3 py-2"
+          disabled={isLoading}
         />
       </div>
 
       <button
         type="submit"
-        className="bg-[#F16767] hover:bg-red-400 text-white font-semibold px-6 py-2 rounded shadow"
+        className="bg-[#F16767] hover:bg-red-400 text-white font-semibold px-6 py-2 rounded shadow disabled:opacity-75"
+        disabled={isLoading}
       >
-        Add Announcement
+        {isLoading ? "Posting..." : "Add Announcement"}
       </button>
     </form>
   );

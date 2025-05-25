@@ -32,6 +32,7 @@ const Login: React.FC = () => {
 
   const loginMutation = useMutation({
     mutationFn: (values: LoginFormValues) => {
+      console.log(values);
       return login({ ...values });
     },
     onError: (error: any) => {
@@ -42,10 +43,10 @@ const Login: React.FC = () => {
       }
     },
     onSuccess: (data: any) => {
-    //   dispatch(loginSuccess({ token: data.access, role: selectedRole }));
+
       localStorage.setItem("access_token", data.token);
-      // localStorage.setItem("refresh_token", data.refresh);
-      // localStorage.setItem("user_role", selectedRole);
+      localStorage.setItem("role",selectedRole)
+
       navigate("/");
     },
   });
@@ -59,7 +60,6 @@ const Login: React.FC = () => {
   };
 
   const validationSchema = Yup.object({
-    email: Yup.string().email("Email invalide").required("Email requis"),
     password: Yup.string().required("Mot de passe requis"),
   });
 
@@ -171,10 +171,10 @@ const Login: React.FC = () => {
                   <div className="relative">
                     <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                     <Field
-                      type="email"
+                      type="text"
                       name="email"
                       className="w-full pl-11 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#e8db29] focus:border-[#e8db29] text-gray-700"
-                      placeholder="Adresse email"
+                      placeholder="username"
                     />
                   </div>
                   <ErrorMessage

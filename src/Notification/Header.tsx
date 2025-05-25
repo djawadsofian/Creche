@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 // import { setProfile } from "@/redux/reducers/AuthReducer";
 // import { useDispatch, useSelector } from "react-redux";
 // import { RootState } from "@/redux/store";
-import logo from "@/assets/istockphoto-1165158707-612x612-removebg-preview.png"
+import logo from "@/assets/istockphoto-1165158707-612x612-removebg-preview.png";
 import { useWebSocket } from "./useWebsocket";
 import Notification from "./Notification";
 import { Button } from "@/components/ui/button";
@@ -16,13 +16,13 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription, 
+  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 // import useDebounce from "@/hooks/useDebounce";
 // import Teams from "@/pages/Student/Teams";
@@ -34,6 +34,14 @@ import { NavLink } from "react-router-dom";
 const Header = () => {
   const { messages } = useWebSocket();
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const navigate = useNavigate();
+  const role = localStorage.getItem("role");
+  const storedAdmin = localStorage.getItem("admin");
+  const storedParent = localStorage.getItem("parent");
+
+  const admin = storedAdmin ? JSON.parse(storedAdmin) : null;
+  const parent = storedParent ? JSON.parse(storedParent) : null;
+  const id = admin?.role == role ? admin?.id : parent?.id;
 
   console.log("new notifications ", messages);
   // const dispatch = useDispatch();
@@ -171,9 +179,9 @@ const Header = () => {
   // const profile = useSelector((state: RootState) => state.auth.profile);
 
   return (
-    <header className="flex items-center justify-between h-20 bg-white bg fixed w-full  mt-0 ">
+    <header className="flex items-center justify-between h-20 bg-white bg fixed w-full z-50 mt-0 ">
       {/* Search Input */}
-      <div className=" flex items-center h-full justify-between container px-20"> 
+      <div className=" flex items-center h-full justify-between container px-20">
         <img src={logo} className="w-32 h-32" alt="" />
         {/* <div className="relative w-[85%] bg-[#DBDBDB] ml-7 h-11 rounded-md flex items-center pl-12">
           <span className="absolute inset-y-0 left-2 flex items-center pointer-events-none">
@@ -192,11 +200,35 @@ const Header = () => {
         <div className="flex items-center justify-between ">
           {/* Icons */}
           <div className="flex  items-center gap-4 text-[#787486] ml-8">
-            <button aria-label="Calendar" className="hover:text-gray-700">
-              <ReactSVG src={calenderIcon} className="w-6 h-6" />
-            </button>
-            <button aria-label="Help" className="hover:text-gray-700">
-              <ReactSVG src={MessageQuestionIcon} className="w-6 h-6" />
+            {admin || parent ? (
+              <button
+                onClick={() => {
+                  localStorage.removeItem("access_token")
+                  navigate("/signin");
+                }}
+                className="ml-4 inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white transition bg-[#F16767] hover:opacity-80 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 rounded-full shadow-md"
+              >
+                Logout
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => navigate("/signin")}
+                  className="ml-4 inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white transition bg-[#F16767] hover:bg-opcaity-80 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 rounded-full shadow-md"
+                >
+                  Login
+                </button>
+
+              
+              </>
+            )}
+
+            <button
+              onClick={() => navigate(`profile/${role}/${id}`)}
+              className="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white transition bg-yellow-500 cursor-pointer hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 rounded-full shadow-md"
+              aria-label="Go to Profile"
+            >
+              View Profile
             </button>
             <Sheet>
               <SheetTrigger asChild>
